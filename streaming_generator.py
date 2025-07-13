@@ -23,7 +23,7 @@ import queue
 import os
 
 from models import Model
-from generator import Generator, Segment, load_llama3_tokenizer
+from generator import Generator, Segment, load_qwen_tokenizer
 from moshi.models import loaders
 from huggingface_hub import hf_hub_download
 from watermarking import load_watermarker, watermark, CSM_1B_GH_WATERMARK
@@ -74,7 +74,7 @@ class StreamingGenerator:
     
     def _setup_tokenizers(self):
         """Initialize text and audio tokenizers"""
-        self._text_tokenizer = load_llama3_tokenizer()
+        self._text_tokenizer = load_qwen_tokenizer()
         
         # Load Mimi audio codec
         mimi_weight = hf_hub_download(loaders.DEFAULT_REPO, loaders.MIMI_NAME)

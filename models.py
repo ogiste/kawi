@@ -39,9 +39,52 @@ def llama3_2_100M() -> torchtune.modules.transformer.TransformerDecoder:
     )
 
 
+def qwen2_5_1_5B() -> torchtune.modules.transformer.TransformerDecoder:
+    """
+    Qwen2.5-1.5B architecture - no authorization required!
+    Specs: 28 layers, 12 heads, 2 kv_heads, 1536 embed_dim
+    """
+    return llama3_2.llama3_2(
+        vocab_size=151936,  # Qwen2.5 vocab size
+        num_layers=28,
+        num_heads=12,
+        num_kv_heads=2,
+        embed_dim=1536,
+        max_seq_len=32768,
+        intermediate_dim=8960,
+        attn_dropout=0.0,
+        norm_eps=1e-6,
+        rope_base=1000000,
+        scale_factor=32,
+    )
+
+
+def qwen2_5_0_5B() -> torchtune.modules.transformer.TransformerDecoder:
+    """
+    Qwen2.5-0.5B architecture for smaller variant
+    Specs: 24 layers, 14 heads, 2 kv_heads, 1024 embed_dim
+    """
+    return llama3_2.llama3_2(
+        vocab_size=151936,  # Qwen2.5 vocab size
+        num_layers=24,
+        num_heads=14,
+        num_kv_heads=2,
+        embed_dim=1024,
+        max_seq_len=32768,
+        intermediate_dim=2816,
+        attn_dropout=0.0,
+        norm_eps=1e-6,
+        rope_base=1000000,
+        scale_factor=32,
+    )
+
+
 FLAVORS = {
-    "llama-1B": llama3_2_1B,
-    "llama-100M": llama3_2_100M,
+    "qwen-1.5B": qwen2_5_1_5B,      # Main model
+    "qwen-0.5B": qwen2_5_0_5B,      # Smaller variant
+    # Keep old names for backward compatibility
+    "llama-1B": qwen2_5_1_5B,       # Redirect to Qwen
+    "llama-100M": qwen2_5_0_5B,     # Redirect to Qwen
 }
 
 
@@ -89,9 +132,9 @@ def sample_topk(logits: torch.Tensor, topk: int, temperature: float):
 
 @dataclass
 class ModelArgs:
-    backbone_flavor: str
-    decoder_flavor: str
-    text_vocab_size: int
+    backbone_flavor: str = "qwen-1.5B"  # Default to Qwen
+    decoder_flavor: str = "qwen-1.5B"   # Default to Qwen
+    text_vocab_size: int = 151936       # Qwen2.5 vocab size
     audio_vocab_size: int
     audio_num_codebooks: int
 

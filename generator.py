@@ -19,20 +19,17 @@ class Segment:
     audio: torch.Tensor
 
 
-def load_llama3_tokenizer():
+def load_qwen_tokenizer():
     """
-    https://github.com/huggingface/transformers/issues/22794#issuecomment-2092623992
+    Load Qwen2.5 tokenizer - no authorization required!
     """
-    tokenizer_name = "meta-llama/Llama-3.2-1B"
+    tokenizer_name = "Qwen/Qwen2.5-1.5B"
     tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
-    bos = tokenizer.bos_token
-    eos = tokenizer.eos_token
-    tokenizer._tokenizer.post_processor = TemplateProcessing(
-        single=f"{bos}:0 $A:0 {eos}:0",
-        pair=f"{bos}:0 $A:0 {eos}:0 {bos}:1 $B:1 {eos}:1",
-        special_tokens=[(f"{bos}", tokenizer.bos_token_id), (f"{eos}", tokenizer.eos_token_id)],
-    )
-
+    
+    # Qwen2.5 tokenizer setup
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+    
     return tokenizer
 
 
@@ -44,7 +41,7 @@ class Generator:
         self._model = model
         self._model.setup_caches(1)
 
-        self._text_tokenizer = load_llama3_tokenizer()
+        self._text_tokenizer = load_qwen_tokenizer()
 
         device = next(model.parameters()).device
         mimi_weight = hf_hub_download(loaders.DEFAULT_REPO, loaders.MIMI_NAME)

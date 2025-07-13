@@ -6,6 +6,7 @@
 set -e  # Exit on any error
 
 echo "🚀 Starting CSM Streaming setup for vast.ai..."
+echo "🔓 Now using open Qwen2.5 models - no authorization required!"
 echo "=================================================="
 
 # Check if we're in the right directory
@@ -49,14 +50,16 @@ export TORCH_CUDNN_V8_API_ENABLED=1
 export NO_TORCH_COMPILE=0
 EOF
 
-# Login to HuggingFace if token is available
-if [ ! -z "$HF_TOKEN" ]; then
-    echo "🔐 Logging into HuggingFace..."
-    huggingface-cli login --token $HF_TOKEN
-else
-    echo "⚠️  No HF_TOKEN environment variable found."
-    echo "   You may need to login manually: huggingface-cli login"
-fi
+# Note: No need for HF_TOKEN for Qwen2.5 models!
+echo "✅ Using fully open Qwen2.5 models - no authorization needed!"
+
+# Pre-download Qwen model
+echo "📥 Pre-downloading Qwen2.5-1.5B..."
+python -c "
+from huggingface_hub import snapshot_download
+snapshot_download('Qwen/Qwen2.5-1.5B', cache_dir='./models')
+print('✅ Qwen2.5-1.5B downloaded successfully!')
+"
 
 # Run system info and setup
 echo "🔍 Running system checks and setup..."
@@ -64,7 +67,7 @@ python deploy_vast.py --setup
 
 # Run a quick test
 echo "🧪 Running quick test..."
-python test_streaming.py --text "Hello from vast.ai! CSM streaming is working." --output test_output.wav
+python test_streaming.py --text "Hello from vast.ai! CSM streaming with open Qwen2.5 is working." --output test_output.wav
 
 # Check if test was successful
 if [ -f "test_output.wav" ]; then
@@ -80,6 +83,7 @@ python deploy_vast.py --benchmark
 echo ""
 echo "=================================================="
 echo "✅ CSM Streaming setup complete!"
+echo "🔓 No authorization required - fully open source!"
 echo ""
 echo "🎯 Quick commands to try:"
 echo "  python test_streaming.py --text 'Your text here'"

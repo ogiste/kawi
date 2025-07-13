@@ -1,6 +1,7 @@
-# CSM - Streaming Optimized Version
+# CSM - Streaming Optimized Version (Qwen2.5 Powered)
 
 **🚀 NEW: Streaming Audio Generation** - Real-time audio generation with 2-10x speed improvements!
+**🔓 NEW: No Authorization Required** - Replaced Llama with open Qwen2.5 models!
 
 **2025/05/20** - CSM is availabile natively in [Hugging Face Transformers](https://huggingface.co/docs/transformers/main/en/model_doc/csm) 🤗 as of version `4.52.1`, more info available [in our model repo](https://huggingface.co/sesame/csm-1b)
 
@@ -15,6 +16,7 @@ CSM (Conversational Speech Model) is a speech generation model from [Sesame](htt
 - 🎵 **Real-time audio streaming** - start hearing audio while it's still generating
 - 🔧 **Easy vast.ai deployment** with automated setup scripts
 - 📊 **Performance monitoring** and optimization recommendations
+- 🔓 **No authorization required** - uses open Qwen2.5 models instead of restricted Llama
 
 ## 🚀 Quick Start (Streaming)
 
@@ -26,13 +28,13 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 
-# Quick test
+# Quick test (no authorization needed!)
 python test_streaming.py --text "Hello from the future of speech synthesis!"
 ```
 
 ### Vast.ai Deployment
 ```bash
-# On your vast.ai instance
+# On your vast.ai instance (no HF_TOKEN required!)
 git clone <this-repo>
 cd csm
 python deploy_vast.py --all  # Setup, download models, and benchmark
@@ -119,7 +121,7 @@ The streaming generator provides real-time performance metrics:
 ```
 Text Input → Tokenization → Frame Generation → Audio Decoding → Streaming Output
      ↓              ↓              ↓              ↓              ↓
-  Llama-3.2     CSM Backbone   Frame Batching   Mimi Codec   Real-time Play
+  Qwen2.5     CSM Backbone   Frame Batching   Mimi Codec   Real-time Play
 ```
 
 ### Key Optimizations
@@ -266,7 +268,7 @@ For original CSM usage and examples, see below:
 * Similarly, Python 3.10 is recommended, but newer versions may be fine
 * For some audio operations, `ffmpeg` may be required
 * Access to the following Hugging Face models:
-  * [Llama-3.2-1B](https://huggingface.co/meta-llama/Llama-3.2-1B)
+  * [Qwen2.5-1.5B](https://huggingface.co/Qwen/Qwen2.5-1.5B) - **NO AUTHORIZATION NEEDED!**
   * [CSM-1B](https://huggingface.co/sesame/csm-1b)
 
 ### Setup

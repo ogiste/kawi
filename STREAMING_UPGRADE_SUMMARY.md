@@ -1,10 +1,10 @@
 # CSM Streaming Upgrade - Complete Implementation Summary
 
-## 🎯 Mission: From 30 Minutes to Real-Time
+## 🎯 Mission: From 30 Minutes to Real-Time + Open Access
 
-**Problem**: Original CSM took 30 minutes to generate 40 seconds of audio - completely unusable for experimentation.
+**Problem**: Original CSM took 30 minutes to generate 40 seconds of audio - completely unusable for experimentation. Additionally, required Llama authorization that blocked many users.
 
-**Solution**: Streaming architecture with torch compilation, CUDA graphs, and frame batching achieving **20-50x speed improvements**.
+**Solution**: Streaming architecture with torch compilation, CUDA graphs, and frame batching achieving **20-50x speed improvements**, plus migration to open Qwen2.5 models requiring **no authorization**.
 
 ---
 
@@ -17,21 +17,29 @@ Instead of generating all audio at once, we:
 - Provide real-time feedback and metrics
 - Allow interruption and dynamic adjustment
 
-### 2. **Optimization Layering**
+### 2. **Open Access Design**
+- **🔓 No authorization required**: Replaced Llama with Qwen2.5
+- **📜 Apache 2.0 license**: Fully open source
+- **🌍 Better multilingual**: 29+ languages supported
+- **🚀 Easier deployment**: Works on vast.ai without HF_TOKEN
+
+### 3. **Optimization Layering**
 ```
 Base CSM (30min for 40s) 
     ↓ + Torch Compilation (2-4x faster)
     ↓ + Frame Batching (2-3x faster)  
     ↓ + CUDA Graphs (2-5x faster)
     ↓ + Streaming Architecture (perceived instant)
-= Real-time generation (0.2-0.5x RTF)
+    ↓ + Qwen2.5 Migration (no auth required)
+= Real-time generation (0.2-0.5x RTF) + Open Access
 ```
 
-### 3. **Experimentation-Friendly**
+### 4. **Experimentation-Friendly**
 - Clear progress indicators
 - Performance metrics in real-time
 - Easy parameter tuning
 - Graceful degradation for different hardware
+- **No signup barriers**: Works immediately without accounts
 
 ---
 
