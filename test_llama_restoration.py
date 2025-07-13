@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """
-Test script to verify Qwen2.5 migration works correctly
+Test script to verify Llama 3.2 restoration works correctly
 """
 
 import torch
-from generator import load_qwen_tokenizer
+from generator import load_llama_tokenizer
 from streaming_generator import load_streaming_csm_1b, StreamingConfig
 
-def test_qwen_tokenizer():
-    """Test that Qwen tokenizer works"""
-    print("🧪 Testing Qwen2.5 tokenizer...")
+def test_llama_tokenizer():
+    """Test that Llama tokenizer works"""
+    print("🧪 Testing Llama 3.2 tokenizer...")
     
-    tokenizer = load_qwen_tokenizer()
+    tokenizer = load_llama_tokenizer()
     
     # Test basic tokenization
     test_text = "Hello world, this is a test!"
@@ -26,8 +26,8 @@ def test_qwen_tokenizer():
     return tokenizer
 
 def test_streaming_generation():
-    """Test streaming generation with Qwen"""
-    print("\n🧪 Testing streaming generation with Qwen2.5...")
+    """Test streaming generation with Llama"""
+    print("\n🧪 Testing streaming generation with Llama 3.2...")
     
     device = "cuda" if torch.cuda.is_available() else "cpu"
     
@@ -44,7 +44,7 @@ def test_streaming_generation():
         # Test short generation
         audio_chunks = []
         for chunk in generator.generate_streaming(
-            text="Hello from Qwen2.5 powered CSM!",
+            text="Hello from Llama 3.2-1B powered CSM!",
             speaker=0,
             context=[],
             max_audio_length_ms=5000  # Short test
@@ -52,7 +52,7 @@ def test_streaming_generation():
             audio_chunks.append(chunk)
             print(f"✅ Generated chunk: {len(chunk)} samples")
             
-            # Only test first chunk for migration verification
+            # Only test first chunk for restoration verification
             if len(audio_chunks) >= 2:
                 break
         
@@ -66,21 +66,21 @@ def test_streaming_generation():
     return True
 
 def main():
-    print("🔄 Testing Qwen2.5 migration for CSM")
+    print("🔄 Testing Llama 3.2 restoration for CSM")
     print("=" * 50)
     
     # Test tokenizer
-    tokenizer = test_qwen_tokenizer()
+    tokenizer = test_llama_tokenizer()
     
     # Test streaming
     success = test_streaming_generation()
     
     print("\n" + "=" * 50)
     if success:
-        print("✅ Migration test PASSED! Qwen2.5 integration working correctly.")
-        print("🎉 You can now use CSM without Llama authorization!")
+        print("✅ Restoration test PASSED! Llama 3.2 integration working correctly.")
+        print("🎉 You can now use CSM with native Llama compatibility!")
     else:
-        print("❌ Migration test FAILED. Please check the logs above.")
+        print("❌ Restoration test FAILED. Please check the logs above.")
     
     return success
 

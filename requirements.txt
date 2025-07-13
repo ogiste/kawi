@@ -1,4 +1,4 @@
-# Core CSM dependencies (now using open Qwen2.5 - no authorization required!)
+# Core CSM dependencies (restored to native Llama 3.2 - requires HF authorization)
 torch==2.4.0
 torchaudio==2.4.0
 tokenizers==0.21.0

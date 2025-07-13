@@ -141,16 +141,17 @@ def download_models():
     """Download and cache models"""
     print("📥 Downloading models...")
     
-    # Login to HuggingFace (if token available)
+    # Login to HuggingFace (required for Llama models)
     hf_token = os.environ.get("HF_TOKEN")
     if hf_token:
         print("🔐 Using HuggingFace token from environment")
         stdout, stderr = run_command(f"huggingface-cli login --token {hf_token}")
     else:
-        print("⚠️  No HF_TOKEN found - but that's OK for open models!")
+        print("⚠️  No HF_TOKEN found - Llama models require authorization!")
+        print("   Please run: huggingface-cli login")
     
     # Pre-download models to cache
-    print("🔄 Pre-downloading CSM-1B model...")
+    print("🔄 Pre-downloading models...")
     try:
         from huggingface_hub import snapshot_download
         
@@ -162,13 +163,13 @@ def download_models():
         )
         print("✅ CSM-1B model downloaded")
         
-        # Download Qwen model (NO AUTHORIZATION NEEDED!)
+        # Download Llama model (REQUIRES AUTHORIZATION)
         snapshot_download(
-            repo_id="Qwen/Qwen2.5-1.5B",
+            repo_id="meta-llama/Llama-3.2-1B",
             cache_dir="./models",
             local_files_only=False
         )
-        print("✅ Qwen2.5-1.5B model downloaded (no authorization required!)")
+        print("✅ Llama-3.2-1B model downloaded (authorization required)")
         
     except Exception as e:
         print(f"⚠️  Model download failed: {e}")

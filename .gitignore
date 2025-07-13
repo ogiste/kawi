@@ -46,3 +46,4 @@ context_audio.wav
 *.ckpt
 
 .cursor/
+csm.code-workspace

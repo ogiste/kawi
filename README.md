@@ -1,7 +1,7 @@
-# CSM - Streaming Optimized Version (Qwen2.5 Powered)
+# CSM - Streaming Optimized Version (Llama 3.2 Powered)
 
 **🚀 NEW: Streaming Audio Generation** - Real-time audio generation with 2-10x speed improvements!
-**🔓 NEW: No Authorization Required** - Replaced Llama with open Qwen2.5 models!
+**🔥 RESTORED: Native Llama 3.2 Compatibility** - Perfect tokenizer alignment for optimal performance!
 
 **2025/05/20** - CSM is availabile natively in [Hugging Face Transformers](https://huggingface.co/docs/transformers/main/en/model_doc/csm) 🤗 as of version `4.52.1`, more info available [in our model repo](https://huggingface.co/sesame/csm-1b)
 
@@ -16,9 +16,13 @@ CSM (Conversational Speech Model) is a speech generation model from [Sesame](htt
 - 🎵 **Real-time audio streaming** - start hearing audio while it's still generating
 - 🔧 **Easy vast.ai deployment** with automated setup scripts
 - 📊 **Performance monitoring** and optimization recommendations
-- 🔓 **No authorization required** - uses open Qwen2.5 models instead of restricted Llama
+- 🔥 **Native Llama compatibility** - perfect tokenizer alignment for optimal quality
 
 ## 🚀 Quick Start (Streaming)
+
+> 📖 **For Developers**: 
+> - [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md) - Comprehensive features, testing, and API documentation
+> - [SCRIPTS_OVERVIEW.md](SCRIPTS_OVERVIEW.md) - Quick reference for all available scripts
 
 ### Local Setup
 ```bash
@@ -28,17 +32,24 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 
-# Quick test (no authorization needed!)
+# Login to HuggingFace (required for Llama 3.2 access)
+huggingface-cli login
+
+# Quick test with native Llama tokenizer
 python test_streaming.py --text "Hello from the future of speech synthesis!"
 ```
 
 ### Vast.ai Deployment
 ```bash
-# On your vast.ai instance (no HF_TOKEN required!)
+# On your vast.ai instance
 git clone <this-repo>
 cd csm
+
+# Login to HuggingFace for Llama access
+huggingface-cli login
+
 python deploy_vast.py --all  # Setup, download models, and benchmark
-python test_streaming.py --text "Testing on vast.ai GPU!"
+python test_streaming.py --text "Testing on vast.ai GPU with Llama 3.2!"
 ```
 
 ## 🎯 Performance Improvements

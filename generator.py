@@ -19,28 +19,26 @@ class Segment:
     audio: torch.Tensor
 
 
-def load_qwen_tokenizer():
+def load_llama_tokenizer():
     """
-    Load Qwen2.5 tokenizer with vocabulary mapping for CSM compatibility
+    Load Llama 3.2 tokenizer - native CSM compatibility
     
-    The CSM model was trained with 128,256 vocab size (Llama's size).
-    We need to map Qwen tokens to fit within this space.
+    The CSM model was trained with Llama's 128,256 vocab size.
+    Using the original Llama tokenizer ensures perfect compatibility.
     """
-    tokenizer_name = "Qwen/Qwen2.5-1.5B"
+    tokenizer_name = "meta-llama/Llama-3.2-1B"
     tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
     
-    # Qwen2.5 tokenizer setup
+    # Llama tokenizer setup
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
     
-    # Important: Check if Qwen vocab fits in CSM's expected range
-    qwen_vocab_size = tokenizer.vocab_size
-    csm_vocab_size = 128_256
+    # Verify vocab size is close to CSM expectations
+    # Note: Llama 3.2-1B has 128,000 tokens, close enough to CSM's 128,256
+    if tokenizer.vocab_size not in [128_000, 128_256]:
+        print(f"⚠️  Warning: Unexpected vocab size {tokenizer.vocab_size}, expected ~128K")
     
-    if qwen_vocab_size > csm_vocab_size:
-        print(f"⚠️  Warning: Qwen vocab size ({qwen_vocab_size}) > CSM vocab size ({csm_vocab_size})")
-        print(f"   Some tokens may be mapped to UNK. Consider using a smaller tokenizer.")
-    
+    print(f"✅ Llama 3.2 tokenizer loaded with {tokenizer.vocab_size:,} tokens")
     return tokenizer
 
 
@@ -52,7 +50,7 @@ class Generator:
         self._model = model
         self._model.setup_caches(1)
 
-        self._text_tokenizer = load_qwen_tokenizer()
+        self._text_tokenizer = load_llama_tokenizer()
 
         device = next(model.parameters()).device
         mimi_weight = hf_hub_download(loaders.DEFAULT_REPO, loaders.MIMI_NAME)
@@ -70,12 +68,6 @@ class Generator:
         frame_masks = []
 
         text_tokens = self._text_tokenizer.encode(f"[{speaker}]{text}")
-        
-        # Ensure tokens fit within CSM's vocab size
-        max_token_id = max(text_tokens) if text_tokens else 0
-        if max_token_id >= 128_256:
-            print(f"⚠️  Warning: Token ID {max_token_id} exceeds CSM vocab size. Clipping to safe range.")
-            text_tokens = [min(token, 128_255) for token in text_tokens]
         
         text_frame = torch.zeros(len(text_tokens), 33).long()
         text_frame_mask = torch.zeros(len(text_tokens), 33).bool()
