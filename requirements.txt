@@ -1,3 +1,4 @@
+# Core CSM dependencies
 torch==2.4.0
 torchaudio==2.4.0
 tokenizers==0.21.0
@@ -7,3 +8,20 @@ moshi==0.2.2
 torchtune==0.4.0
 torchao==0.9.0
 silentcipher @ git+https://github.com/SesameAILabs/silentcipher@master
+
+# Streaming and audio playback
+sounddevice>=0.4.6
+numpy>=1.24.0
+
+# Optimization and deployment
+accelerate>=0.21.0
+datasets>=2.14.0
+
+# Development and experimentation
+jupyter>=1.0.0
+matplotlib>=3.7.0
+tqdm>=4.65.0
+
+# Optional: For vast.ai deployment convenience
+psutil>=5.9.0
+GPUtil>=1.4.0
