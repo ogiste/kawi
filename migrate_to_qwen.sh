@@ -5,7 +5,7 @@ echo "🔓 No authorization required - using fully open models!"
 
 # Test the migration
 echo "🧪 Running migration test..."
-python test_qwen_migration.py
+python3 test_qwen_migration.py
 
 if [ $? -eq 0 ]; then
     echo "✅ Migration successful!"

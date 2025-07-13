@@ -283,7 +283,7 @@ pip install -r requirements.txt
 # Disable lazy compilation in Mimi
 export NO_TORCH_COMPILE=1
 
-# You will need access to CSM-1B and Llama-3.2-1B
+# You will need access to CSM-1B and Qwen2.5-1B
 huggingface-cli login
 ```
 

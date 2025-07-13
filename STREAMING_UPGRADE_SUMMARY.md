@@ -264,7 +264,7 @@ generator = load_streaming_csm_1b(config=config)
 ```
 Input Text → Tokenization → Frame Generation → Audio Decoding → Output Stream
      ↓             ↓              ↓              ↓              ↓
-  Llama-3.2    CSM Backbone   Batch Process   Mimi Codec   Real-time Play
+  Qwen2.5    CSM Backbone   Batch Process   Mimi Codec   Real-time Play
 ```
 
 ### Key Optimizations Explained

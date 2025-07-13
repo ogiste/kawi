@@ -21,7 +21,10 @@ class Segment:
 
 def load_qwen_tokenizer():
     """
-    Load Qwen2.5 tokenizer - no authorization required!
+    Load Qwen2.5 tokenizer with vocabulary mapping for CSM compatibility
+    
+    The CSM model was trained with 128,256 vocab size (Llama's size).
+    We need to map Qwen tokens to fit within this space.
     """
     tokenizer_name = "Qwen/Qwen2.5-1.5B"
     tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
@@ -29,6 +32,14 @@ def load_qwen_tokenizer():
     # Qwen2.5 tokenizer setup
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
+    
+    # Important: Check if Qwen vocab fits in CSM's expected range
+    qwen_vocab_size = tokenizer.vocab_size
+    csm_vocab_size = 128_256
+    
+    if qwen_vocab_size > csm_vocab_size:
+        print(f"⚠️  Warning: Qwen vocab size ({qwen_vocab_size}) > CSM vocab size ({csm_vocab_size})")
+        print(f"   Some tokens may be mapped to UNK. Consider using a smaller tokenizer.")
     
     return tokenizer
 
@@ -59,6 +70,13 @@ class Generator:
         frame_masks = []
 
         text_tokens = self._text_tokenizer.encode(f"[{speaker}]{text}")
+        
+        # Ensure tokens fit within CSM's vocab size
+        max_token_id = max(text_tokens) if text_tokens else 0
+        if max_token_id >= 128_256:
+            print(f"⚠️  Warning: Token ID {max_token_id} exceeds CSM vocab size. Clipping to safe range.")
+            text_tokens = [min(token, 128_255) for token in text_tokens]
+        
         text_frame = torch.zeros(len(text_tokens), 33).long()
         text_frame_mask = torch.zeros(len(text_tokens), 33).bool()
         text_frame[:, -1] = torch.tensor(text_tokens)
